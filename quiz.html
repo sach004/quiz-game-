@@ -1,0 +1,164 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modern Quiz App</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .quiz-box {
+      background-color: white;
+      border-radius: 12px;
+      padding: 30px 40px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .option {
+      background-color: #f1f1f1;
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .option:hover {
+      background-color: #d3eaff;
+    }
+
+    .option input {
+      margin-right: 10px;
+    }
+
+    #submit-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    #submit-btn:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      font-size: 1.2em;
+      text-align: center;
+      margin-top: 20px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quiz-box">
+    <h2 id="question">Loading...</h2>
+    <div id="options-container"></div>
+    <button id="submit-btn" onclick="submitAnswer()">Next</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Venus", "Mars", "Jupiter"],
+        answer: "Mars"
+      },
+      {
+        question: "What is the boiling point of water?",
+        options: ["50°C", "100°C", "200°C", "90°C"],
+        answer: "100°C"
+      },
+      {
+        question: "Which company developed the iPhone?",
+        options: ["Samsung", "Google", "Apple", "Nokia"],
+        answer: "Apple"
+      },
+      {
+        question: "Which gas do plants absorb?",
+        options: ["Oxygen", "Carbon Dioxide", "Hydrogen", "Nitrogen"],
+        answer: "Carbon Dioxide"
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const currentQ = questions[current];
+      document.getElementById("question").innerText = currentQ.question;
+
+      const optionsHTML = currentQ.options.map(option => `
+        <div class="option">
+          <label>
+            <input type="radio" name="answer" value="${option}"> ${option}
+          </label>
+        </div>
+      `).join('');
+
+      document.getElementById("options-container").innerHTML = optionsHTML;
+    }
+
+    function submitAnswer() {
+      const selected = document.querySelector('input[name="answer"]:checked');
+      if (!selected) {
+        alert("Please select an answer!");
+        return;
+      }
+
+      if (selected.value === questions[current].answer) {
+        score++;
+      }
+
+      current++;
+      if (current < questions.length) {
+        loadQuestion();
+      } else {
+        document.getElementById("question").style.display = 'none';
+        document.getElementById("options-container").style.display = 'none';
+        document.getElementById("submit-btn").style.display = 'none';
+        document.getElementById("result").innerText = `🎉 You scored ${score} out of ${questions.length}`;
+      }
+    }
+
+    loadQuestion();
+  </script>
+
+</body>
+</html>
